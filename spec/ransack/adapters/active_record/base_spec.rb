@@ -17,6 +17,11 @@ module Ransack
           it 'has a Relation as its object' do
             subject.object.should be_an ::ActiveRecord::Relation
           end
+
+          it 'should respond properly to respond_to?' do
+            subject.respond_to?("medium_type").should eq true
+            subject.respond_to?("medium_type_wtf").should eq false
+          end
         end
 
         describe '#ransacker' do

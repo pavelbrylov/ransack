@@ -7,6 +7,9 @@ ActiveRecord::Base.establish_connection(
 
 class Person < ActiveRecord::Base
   belongs_to :parent, :class_name => 'Person', :foreign_key => :parent_id
+  belongs_to :medium
+  attr_accessible :medium_id, :medium_type
+
   has_many   :children, :class_name => 'Person', :foreign_key => :parent_id
   has_many   :articles
   has_many   :comments
@@ -21,6 +24,9 @@ class Person < ActiveRecord::Base
   ransacker :doubled_name do |parent|
     Arel::Nodes::InfixOperation.new('||', parent.table[:name], parent.table[:name])
   end
+end
+
+class Medium
 end
 
 class Article < ActiveRecord::Base
@@ -51,10 +57,16 @@ module Schema
       ActiveRecord::Schema.define do
         create_table :people, :force => true do |t|
           t.integer  :parent_id
+          t.integer  :medium_id
+          t.string   :medium_type
           t.string   :name
           t.integer  :salary
           t.boolean  :awesome, :default => false
           t.timestamps
+        end
+
+        create_table :media, :force => true do |t|
+          t.integer :article_id
         end
 
         create_table :articles, :force => true do |t|
